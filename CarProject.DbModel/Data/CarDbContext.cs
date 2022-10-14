@@ -35,6 +35,7 @@ namespace CarProject.Data
 
             modelBuilder.Entity<Car>(entity =>
             {
+                entity.Property(e => e.CreatedBy);
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Image)

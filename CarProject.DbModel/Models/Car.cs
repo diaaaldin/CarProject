@@ -13,6 +13,7 @@ namespace CarProject.Models
         public float Price { get; set; }
         public string Image { get; set; }
         public string Description { get; set; }
+        public int CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int IsReaded { get; set; }
