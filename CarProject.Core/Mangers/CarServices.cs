@@ -75,7 +75,6 @@ namespace CarProject.Core.Mangers
                 CreatedDate = DateTime.Now,
                 IsReaded = 0,
                 Archived = 1
-
             };
 
             _context.Cars.Add(res);
@@ -84,14 +83,58 @@ namespace CarProject.Core.Mangers
             var result = _mapper.Map<CarViewModel>(res);
             return result;
         }
-        public CarViewModel EditCar(int id, CarViewModel vm)
+        public CarViewModel EditCar(UserModelViewModel currentUser, int id, CarViewModel vm)
         {
-            throw new NotImplementedException();
+            var chick = _context.Cars.Find(id)
+                 ?? throw new ServiceValidationException("Car not found");
+
+            var admin = _context.Users.Where(x => x.IsAdmin == 1).ToList();
+            bool isAdmen = admin.Any(x => x.Id == currentUser.Id);
+
+            if (chick.User.Id == currentUser.Id || isAdmen == true)
+            {
+                throw new ServiceValidationException("Car Not Exsist");
+            }
+
+            var url = "";
+
+            if (!string.IsNullOrWhiteSpace(vm.ImageString))
+            {
+                url = Helper.Helper.SaveImage(vm.ImageString, "CarsImages");
+            }
+            chick.Name = vm.Name;
+            chick.Price = vm.Price;
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                var baseURL = "https://localhost:44366/";
+                chick.Image = $@"{baseURL}/api/v1/user/fileretrive/profilepic?filename={url}";
+            }
+
+            chick.Description = vm.Description;
+            chick.UpdatedDate = DateTime.Now;
+            chick.IsReaded = vm.IsReaded;
+            chick.Archived = 1;
+
+            _context.SaveChanges();
+
+            var result = _mapper.Map<CarViewModel>(chick);
+            return result;
         }
 
         public CarViewModel DeleteCustomer(int id)
         {
-            throw new NotImplementedException();
+
+            var car = _context.Cars.Find(id);
+            if (car == null)
+            {
+                throw new ServiceValidationException("Car Not found");
+            }
+
+            _context.Cars.Remove(car);
+            _context.SaveChanges();
+
+            var result = _mapper.Map<CarViewModel>(car);
+            return result;
         }
 
 
