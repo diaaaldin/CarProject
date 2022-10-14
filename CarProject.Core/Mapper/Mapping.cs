@@ -11,6 +11,8 @@ namespace CarProject.Mapper
         {
             CreateMap<User, UserLoginResponseViewModel>().ReverseMap();
             CreateMap<UserModelViewModel, User>().ReverseMap();
+            CreateMap<CarViewModel, Car>().ReverseMap();
+
 
         }
     }
