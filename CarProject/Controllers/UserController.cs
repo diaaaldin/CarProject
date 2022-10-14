@@ -22,12 +22,10 @@ namespace CarProject.Controllers
     [ApiController]
     public class UserController : ApiBaseController
     {
-        private readonly ILogger<WeatherForecastController> _logger;
         private readonly IUserManager _userManager;
 
-        public UserController(ILogger<WeatherForecastController> logger,IUserManager userManager )
+        public UserController(IUserManager userManager )
         {
-            _logger = logger;
             _userManager = userManager;
         }
 
