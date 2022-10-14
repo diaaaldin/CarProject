@@ -1,4 +1,5 @@
-﻿using CarProject.Data;
+﻿using CarProject.Core.Mangers.Interfaces;
+using CarProject.Data;
 using CarProject.Models;
 using CarProject.ViewModel;
 using Microsoft.AspNetCore.Authorization;
@@ -19,78 +20,50 @@ namespace CarProject.Controllers
     public class CarController : ApiBaseController
     {
         private readonly CarDbContext _context;
+        private readonly ICarServices _carServices;
 
-        public CarController(CarDbContext context)
+        public CarController(CarDbContext context , ICarServices carServices)
         {
             _context = context;
+            _carServices = carServices;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Car>>> GetAllCars()
         {
-            return await _context.Cars.ToListAsync();
+            var res = _carServices.GetAllCars();
+            return Ok(res);
         }
 
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Car>>> GetNotReadedCars()
         {
-            return await _context.Cars.Where(x => x.IsReaded == 0).ToListAsync();
+            var res = _carServices.GetNotReadedCars();
+            return Ok(res);
         }
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Car>>> GetReadedCars()
         {
-            return await _context.Cars.Where(x => x.IsReaded == 1).ToListAsync();
+            var res = _carServices.GetReadedCars();
+            return Ok(res);
         }
 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Car>> GetCar(int id)
         {
-            var customer = await _context.Cars.FindAsync(id);
-
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return customer;
+            var res = _carServices.GetCar(id);
+            return Ok(res);
         }
 
         [HttpPost]
         public ActionResult CreateCar([FromBody] CarViewModel vm)
         {
 
-            var url = "";
-
-            if (!string.IsNullOrWhiteSpace(vm.ImageString))
-            {
-                url = Helper.Helper.SaveImage(vm.ImageString, "CarsImages");
-            }
-            string image = "";
-            if (!string.IsNullOrWhiteSpace(url))
-            {
-                var baseURL = "https://localhost:44366/";
-                image = $@"{baseURL}/api/v1/user/fileretrive/profilepic?filename={url}";
-            }
-            var res = new Car
-            {
-                UserId      = LoggedInUser.Id,
-                Name        = vm.Name,
-                Price       = vm.Price,
-                Image       = image,
-                Description = vm.Description,
-                CreatedDate = DateTime.Now,
-                IsReaded    = 0,
-                Archived    = 1
-
-            };
-
-            _context.Cars.Add(res);
-            _context.SaveChanges();
-
+            var res = _carServices.CreateCar(LoggedInUser, vm);
             return Ok(res);
         }
 
@@ -98,55 +71,18 @@ namespace CarProject.Controllers
         [HttpPut]
         public IActionResult EditCar(int id,[FromBody] CarViewModel vm)
         {
-            var chick = _context.Cars.Find(id)
-                ?? throw new ServiceValidationException("Car not found");
-
-            var admin = _context.Users.Where(x => x.IsAdmin == 1).ToList();
-            bool isAdmen = admin.Any(x => x.Id == LoggedInUser.Id);
-
-            if ( chick.User.Id == LoggedInUser.Id || isAdmen == true)
-            {
-                return BadRequest();
-            }
-
-            var url = "";
-
-            if (!string.IsNullOrWhiteSpace(vm.ImageString))
-            {
-                url = Helper.Helper.SaveImage(vm.ImageString, "CarsImages");
-            }
-            chick.Name = vm.Name;
-            chick.Price = vm.Price;
-             if (!string.IsNullOrWhiteSpace(url))
-            {
-                var baseURL = "https://localhost:44366/";
-                chick.Image = $@"{baseURL}/api/v1/user/fileretrive/profilepic?filename={url}";
-            }
-
-            chick.Description = vm.Description;
-            chick.UpdatedDate = DateTime.Now;
-            chick.IsReaded = vm.IsReaded;
-            chick.Archived = 1;
-
-            _context.SaveChanges();
-
-            return Ok(chick);
+            var res = _carServices.EditCar(LoggedInUser,id, vm);
+            return Ok(res);
         }
 
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-            var customer = await _context.Cars.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
 
-            _context.Cars.Remove(customer);
-            await _context.SaveChangesAsync();
+            var res = _carServices.DeleteCustomer(id);
+            return Ok(res);
 
-            return NoContent();
         }
 
     }
