@@ -14,6 +14,8 @@ using Tazeez.Common.Extensions;
 using Tazeez.Common.Logging;
 using Serilog;
 using CarProject;
+using CarProject.Core.Mangers.Interfaces;
+using CarProject.ViewModel;
 
 namespace ExceptionsMid.Extenstions
 {
@@ -120,20 +122,20 @@ namespace ExceptionsMid.Extenstions
             {
                 logMessage.RequestPath = context.Request?.Path;
 
-                //var helperManager = context.RequestServices.GetService(typeof(ICommonManager)) as ICommonManager;
+                var helperManager = context.RequestServices.GetService(typeof(ICommonManager)) as ICommonManager;
 
                 var ClaimId = context.User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
 
-                //if (!string.IsNullOrWhiteSpace(ClaimId) && int.TryParse(ClaimId, out int id))
-                //{
-                //    var user = helperManager.GetUserRole(new UserModel { Id = id });
+                if (!string.IsNullOrWhiteSpace(ClaimId) && int.TryParse(ClaimId, out int id))
+                {
+                    var user = helperManager.GetUserRole(new UserModelViewModel { Id = id });
 
-                //    if (user != null)
-                //    {
-                //        logMessage.UserId = user.Id;
-                //        logMessage.UserEmail = user.Email;
-                //    }
-                //}
+                    if (user != null)
+                    {
+                        logMessage.UserId = user.Id;
+                        logMessage.UserEmail = user.Email;
+                    }
+                }
             }
             await logger.LogMessageAsync(logMessage).AnyContext();
         }

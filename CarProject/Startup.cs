@@ -43,6 +43,7 @@ namespace CarProject
             services.AddScoped<IUserManager , UserManager>();
             services.AddScoped<ICommonManager , CommonManager>();
             services.AddScoped<ICarServices , CarServices>();
+            services.AddScoped<IRoleManager , RoleManager>();
 
             services.AddLogging();
 

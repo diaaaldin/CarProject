@@ -133,6 +133,18 @@ namespace CarProject.Core.Mangers
             //return _mapper.Map<UserModelViewModel>(user);
             return res;
         }
+        public void DeleteUser(UserModelViewModel currentUser , int id)
+        {
+            if (currentUser.Id == id )
+            {
+                throw new ServiceValidationException("you have no access to delete your self");
+            }
+            var user = _context.Users
+                .FirstOrDefault(x => x.Id == id)
+                ??throw new ServiceValidationException("User not found");
+            user.Archived = 0;
+            _context.SaveChanges();
+        }
         #endregion public
 
         #region private

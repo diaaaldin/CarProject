@@ -66,6 +66,12 @@ namespace CarProject.Controllers
             var byteArray = System.IO.File.ReadAllBytes(folderPath);
             return File(byteArray, "image/jpeg", filename);
         }
-       
+        [HttpDelete]
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            _userManager.DeleteUser(LoggedInUser, id);
+            return Ok();
+        }
     }
 }

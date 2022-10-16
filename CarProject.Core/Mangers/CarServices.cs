@@ -108,8 +108,12 @@ namespace CarProject.Core.Mangers
         }
         public CarViewModel EditCar(UserModelViewModel currentUser, int id, CarViewModel vm)
         {
-            var chick = _context.Cars.Find(id)
-                 ?? throw new ServiceValidationException("Car not found");
+            var chick = _context.Cars.FirstOrDefault(x => x.Id == id);
+
+            if (chick == null)
+            {
+              throw new ServiceValidationException("Car not found");
+            }
 
             var admin = _context.Users.Where(x => x.IsAdmin == 1).ToList();
             bool isAdmen = admin.Any(x => x.Id == currentUser.Id);

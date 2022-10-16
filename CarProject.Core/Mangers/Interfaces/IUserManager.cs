@@ -12,5 +12,6 @@ namespace CarProject.Core.Mangers.Interfaces
         public UserModelViewModel UpdateProfile(UserModelViewModel currentUser , UserModelViewModel request);
         public UserLoginResponseViewModel Login(UserLoginViewModel vm);
         public UserLoginResponseViewModel Rigester(UserRegisterViewModel vm);
+        public void DeleteUser(UserModelViewModel currentUser, int id);
     }
 }
