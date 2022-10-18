@@ -43,6 +43,8 @@ namespace CarProject
             services.AddScoped<IUserManager , UserManager>();
             services.AddScoped<ICommonManager , CommonManager>();
             services.AddScoped<ICarServices , CarServices>();
+            services.AddScoped<IRoleManager , RoleManager>();
+            services.AddScoped<IBlogManager , BlogManager>();
 
             services.AddLogging();
 
@@ -102,8 +104,8 @@ namespace CarProject
             }
 
             Log.Logger = new LoggerConfiguration()
-              .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Minute)
-              .CreateLogger();
+                          .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Minute)
+                          .CreateLogger();
 
             app.ConfigureExceptionHandler(Log.Logger, env);
 

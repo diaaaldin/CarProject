@@ -1,5 +1,5 @@
 ﻿using System;
-using CarProject.Models;
+using CarProject.DbModel.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -20,6 +20,7 @@ namespace CarProject.Data
 
         public virtual DbSet<Car> Cars { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Blog> Blogs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -35,6 +36,7 @@ namespace CarProject.Data
 
             modelBuilder.Entity<Car>(entity =>
             {
+                entity.Property(e => e.CreatedBy);
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Image)
@@ -49,7 +51,27 @@ namespace CarProject.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cars_Users");
             });
+            modelBuilder.Entity<Blog>(entity =>
+            {
+                entity.ToTable("blogs");
+                entity.HasIndex(e => e.Id);
+                entity.HasIndex(e => e.CreatedId, "FK_blogs_users");
+                entity.Property(e => e.Title)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+                entity.Property(e => e.Content)
+                   .HasMaxLength(255)
+                   .IsUnicode(false);
+                entity.Property(e => e.Status).HasColumnType("int");
 
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+                entity.Property(e => e.Archived).HasColumnType("int");
+
+                entity.HasOne(d => d.User).WithMany(p => p.Blogs).HasConstraintName("FK_blogs_users");
+                
+
+            });
             modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("users");
@@ -87,6 +109,7 @@ namespace CarProject.Data
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
             });
+
 
             OnModelCreatingPartial(modelBuilder);
         }

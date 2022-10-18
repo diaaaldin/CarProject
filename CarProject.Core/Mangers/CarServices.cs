@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CarProject.Core.Mangers.Interfaces;
 using CarProject.Data;
-using CarProject.Models;
-using CarProject.ViewModel;
+using CarProject.DbModel.Models;
+using CarProject.ModelViews.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +54,10 @@ namespace CarProject.Core.Mangers
         {
             var url = "";
 
+            var admin = _context.Users.Where(x => x.IsAdmin == 1).ToList();
+            bool isAdmen = admin.Any(x => x.Id == currentUser.Id);
+            Car res;
+           
             if (!string.IsNullOrWhiteSpace(vm.ImageString))
             {
                 url = Helper.Helper.SaveImage(vm.ImageString, "CarsImages");
@@ -64,18 +68,37 @@ namespace CarProject.Core.Mangers
                 var baseURL = "https://localhost:44366/";
                 image = $@"{baseURL}/api/v1/user/fileretrive/profilepic?filename={url}";
             }
-
-            var res = new Car
+            if (isAdmen)
             {
-                UserId = currentUser.Id,
-                Name = vm.Name,
-                Price = vm.Price,
-                Image = image,
-                Description = vm.Description,
-                CreatedDate = DateTime.Now,
-                IsReaded = 0,
-                Archived = 1
-            };
+                res = new Car
+                {
+                    UserId = vm.UserId,
+                    Name = vm.Name,
+                    Price = vm.Price,
+                    Image = image,
+                    Description = vm.Description,
+                    CreatedBy = currentUser.Id,
+                    CreatedDate = DateTime.Now,
+                    IsReaded = 0,
+                    Archived = 1
+                };
+            }
+            else
+            {
+                res = new Car
+                {
+                    UserId = currentUser.Id,
+                    Name = vm.Name,
+                    Price = vm.Price,
+                    Image = image,
+                    Description = vm.Description,
+                    CreatedBy = currentUser.Id,
+                    CreatedDate = DateTime.Now,
+                    IsReaded = 0,
+                    Archived = 1
+                };
+            }
+           
 
             _context.Cars.Add(res);
             _context.SaveChanges();
@@ -85,37 +108,45 @@ namespace CarProject.Core.Mangers
         }
         public CarViewModel EditCar(UserModelViewModel currentUser, int id, CarViewModel vm)
         {
-            var chick = _context.Cars.Find(id)
-                 ?? throw new ServiceValidationException("Car not found");
+            var chick = _context.Cars.FirstOrDefault(x => x.Id == id);
+
+            if (chick == null)
+            {
+              throw new ServiceValidationException("Car not found");
+            }
 
             var admin = _context.Users.Where(x => x.IsAdmin == 1).ToList();
             bool isAdmen = admin.Any(x => x.Id == currentUser.Id);
 
             if (chick.User.Id == currentUser.Id || isAdmen == true)
             {
-                throw new ServiceValidationException("Car Not Exsist");
+                var url = "";
+
+                if (!string.IsNullOrWhiteSpace(vm.ImageString))
+                {
+                    url = Helper.Helper.SaveImage(vm.ImageString, "CarsImages");
+                }
+                chick.Name = vm.Name;
+                chick.Price = vm.Price;
+                if (!string.IsNullOrWhiteSpace(url))
+                {
+                    var baseURL = "https://localhost:44366/";
+                    chick.Image = $@"{baseURL}/api/v1/user/fileretrive/profilepic?filename={url}";
+                }
+
+                chick.Description = vm.Description;
+                chick.UpdatedDate = DateTime.Now;
+                chick.IsReaded = vm.IsReaded;
+                chick.Archived = 1;
+
+                _context.SaveChanges();
             }
-
-            var url = "";
-
-            if (!string.IsNullOrWhiteSpace(vm.ImageString))
+            else
             {
-                url = Helper.Helper.SaveImage(vm.ImageString, "CarsImages");
-            }
-            chick.Name = vm.Name;
-            chick.Price = vm.Price;
-            if (!string.IsNullOrWhiteSpace(url))
-            {
-                var baseURL = "https://localhost:44366/";
-                chick.Image = $@"{baseURL}/api/v1/user/fileretrive/profilepic?filename={url}";
+                throw new ServiceValidationException("User not valid");
             }
 
-            chick.Description = vm.Description;
-            chick.UpdatedDate = DateTime.Now;
-            chick.IsReaded = vm.IsReaded;
-            chick.Archived = 1;
 
-            _context.SaveChanges();
 
             var result = _mapper.Map<CarViewModel>(chick);
             return result;

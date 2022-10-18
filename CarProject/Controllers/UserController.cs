@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using CarProject.Data;
-using CarProject.Models;
-using CarProject.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.IdentityModel.Tokens;
@@ -15,11 +13,14 @@ using System.Linq;
 using Tazeez.Common.Extensions;
 using CarProject.Core.Mangers.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
+using CarProject.ModelViews.ViewModel;
 
 namespace CarProject.Controllers
 {
     [Route("api/[controller]/[Action]")]
     [ApiController]
+
     public class UserController : ApiBaseController
     {
         private readonly IUserManager _userManager;
@@ -45,6 +46,7 @@ namespace CarProject.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public IActionResult UpdateMyProfile([FromBody] UserModelViewModel vm)
         {
             var user = _userManager.UpdateProfile(LoggedInUser , vm);
@@ -55,6 +57,7 @@ namespace CarProject.Controllers
         
 
         [HttpGet]
+        [Authorize]
         public IActionResult Retrive(string filename)
         {
             var folderPath = Directory.GetCurrentDirectory();
@@ -62,6 +65,12 @@ namespace CarProject.Controllers
             var byteArray = System.IO.File.ReadAllBytes(folderPath);
             return File(byteArray, "image/jpeg", filename);
         }
-       
+        [HttpDelete]
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            _userManager.DeleteUser(LoggedInUser, id);
+            return Ok();
+        }
     }
 }

@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace CarProject.Core.Mangers.Interfaces
 {
-    public interface ICommonManager :IManager
+    public interface IRoleManager
     {
-        UserModelViewModel GetUserRole(UserModelViewModel user);
-
+        bool CheckAccess(UserModelViewModel userModel);
     }
 }

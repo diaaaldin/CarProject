@@ -1,5 +1,5 @@
-﻿using CarProject.Models;
-using CarProject.ViewModel;
+﻿using CarProject.DbModel.Models;
+using CarProject.ModelViews.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +10,13 @@ namespace CarProject.Core.Mangers.Interfaces
 {
     public interface ICarServices
     {
-        List<Car> GetAllCars();
-        List<Car> GetNotReadedCars();
-        List<Car> GetReadedCars();
-        CarViewModel GetCar(int id);
-        CarViewModel CreateCar(UserModelViewModel currentUser, CarViewModel vm);
-        CarViewModel EditCar(UserModelViewModel currentUser, int id, CarViewModel vm);
-        CarViewModel DeleteCustomer(int id);
+       public List<Car> GetAllCars();
+       public List<Car> GetNotReadedCars();
+       public List<Car> GetReadedCars();
+       public CarViewModel GetCar(int id);
+       public CarViewModel CreateCar(UserModelViewModel currentUser, CarViewModel vm);
+       public CarViewModel EditCar(UserModelViewModel currentUser, int id, CarViewModel vm);
+       public CarViewModel DeleteCustomer(int id);
 
     }
 }

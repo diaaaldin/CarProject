@@ -1,12 +1,13 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CarProject.ViewModel
+namespace CarProject.ModelViews.ViewModel
 {
     public class CarViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public int UserId { get; set; }
         public float Price { get; set; }
         [DefaultValue("")]
         public string Image { get; set; }
