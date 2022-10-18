@@ -1,6 +1,6 @@
 ﻿using Autofac.Core;
 using CarProject.Core.Mangers.Interfaces;
-using CarProject.ViewModel;
+using CarProject.ModelViews.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore.Storage;

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using CarProject.Models;
-using CarProject.ViewModel;
+using CarProject.DbModel.Models;
+using CarProject.ModelViews.ViewModel;
+using CSVWorker.Common.Extensions;
 
 namespace CarProject.Mapper
 {
@@ -12,6 +13,9 @@ namespace CarProject.Mapper
             CreateMap<User, UserLoginResponseViewModel>().ReverseMap();
             CreateMap<UserModelViewModel, User>().ReverseMap();
             CreateMap<Car, CarViewModel>().ReverseMap();
+            CreateMap<BlogViewModel, Blog>().ReverseMap();
+            CreateMap<PagedResult<BlogViewModel>, PagedResult<Blog>>().ReverseMap();
+
         }
     }
 }

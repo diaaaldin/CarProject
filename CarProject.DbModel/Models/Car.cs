@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace CarProject.Models
+namespace CarProject.DbModel.Models
 {
     public partial class Car
     {

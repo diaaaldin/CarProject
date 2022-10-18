@@ -1,7 +1,7 @@
 ﻿using CarProject.Core.Mangers.Interfaces;
 using CarProject.Data;
-using CarProject.Models;
-using CarProject.ViewModel;
+using CarProject.DbModel.Models;
+using CarProject.ModelViews.ViewModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

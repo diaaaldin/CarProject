@@ -1,4 +1,5 @@
-﻿namespace CarProject.ViewModel
+﻿
+namespace CarProject.ModelViews.ViewModel
 {
     public class UserLoginViewModel
     {

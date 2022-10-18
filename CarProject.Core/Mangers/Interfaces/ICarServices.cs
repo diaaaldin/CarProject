@@ -1,5 +1,5 @@
-﻿using CarProject.Models;
-using CarProject.ViewModel;
+﻿using CarProject.DbModel.Models;
+using CarProject.ModelViews.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

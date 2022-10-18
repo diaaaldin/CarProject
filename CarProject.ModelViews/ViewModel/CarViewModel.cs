@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace CarProject.ViewModel
+namespace CarProject.ModelViews.ViewModel
 {
     public class CarViewModel
     {

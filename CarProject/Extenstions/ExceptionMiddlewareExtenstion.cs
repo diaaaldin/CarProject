@@ -15,7 +15,7 @@ using Tazeez.Common.Logging;
 using Serilog;
 using CarProject;
 using CarProject.Core.Mangers.Interfaces;
-using CarProject.ViewModel;
+using CarProject.ModelViews.ViewModel;
 
 namespace ExceptionsMid.Extenstions
 {

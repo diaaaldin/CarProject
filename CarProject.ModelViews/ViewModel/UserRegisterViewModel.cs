@@ -1,7 +1,7 @@
 ﻿using System;
 
-namespace CarProject.ViewModel
-{
+namespace CarProject.ModelViews.ViewModel
+{ 
     public class UserRegisterViewModel
     {
         public int Id { get; set; }

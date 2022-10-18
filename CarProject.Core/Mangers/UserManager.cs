@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using CarProject.Core.Mangers.Interfaces;
 using CarProject.Data;
-using CarProject.Models;
-using CarProject.ViewModel;
+using CarProject.DbModel.Models;
+using CarProject.ModelViews.ViewModel;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;

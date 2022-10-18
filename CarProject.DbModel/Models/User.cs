@@ -1,15 +1,17 @@
-﻿using System;
+﻿using CarProject.DbModel.Models;
+using System;
 using System.Collections.Generic;
 
 #nullable disable
 
-namespace CarProject.Models
+namespace CarProject.DbModel.Models
 {
     public partial class User
     {
         public User()
         {
             Cars = new HashSet<Car>();
+            Blogs = new HashSet<Blog>(); //dont accept  1 1 1 1 1 1 1  => 1 تمنع التكرار
         }
 
         public int Id { get; set; }
@@ -25,5 +27,6 @@ namespace CarProject.Models
         public int? Archived { get; set; }
 
         public virtual ICollection<Car> Cars { get; set; }
+        public virtual ICollection<Blog> Blogs { get; set; }
     }
 }

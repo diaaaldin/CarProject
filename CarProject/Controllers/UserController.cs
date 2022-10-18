@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using CarProject.Data;
-using CarProject.Models;
-using CarProject.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Microsoft.IdentityModel.Tokens;
@@ -16,6 +14,7 @@ using Tazeez.Common.Extensions;
 using CarProject.Core.Mangers.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using CarProject.ModelViews.ViewModel;
 
 namespace CarProject.Controllers
 {
